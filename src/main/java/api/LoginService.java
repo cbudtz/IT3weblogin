@@ -11,12 +11,14 @@ import javax.ws.rs.core.MediaType;
 
 @Path("login")
 public class LoginService {
-    static LoginController loginController = new LoginController();
+    private static LoginController loginController = new LoginController();
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    // Tager imod deserialiserede data fra frontenden til Java-Object
     public String doLogin(LoginData loginData){
-        return loginController.doLogin(loginData);
+        //returner en token hvis det går godt
+        return loginController.validateUser(loginData);
     }
 }

@@ -1,17 +1,22 @@
 package business;
 
-import datalayer.UserDao;
+import datalayer.UserDAO;
 import model.LoginData;
 
+import javax.ws.rs.WebApplicationException;
+
 public class LoginController {
-    private static UserDao userDao = new UserDao();
+    private static UserDAO userDAO = new UserDAO();
 
-    public String doLogin(LoginData loginData){
-        LoginData user = userDao.findUser(loginData.getUsername());
-        if (user!=null && loginData.getPassword().equals(user.getPassword())){
-            return JWThandler.generateToken(loginData.getUsername());
+    public String validateUser(LoginData loginData) {
+        //Prøv at se om der er en bruger der matcher username?
+        LoginData user = userDAO.findUser(loginData.getUsername());
+        //Kontroller om der var en bruger med det rette kodeord?
+        if (user !=null && user.getPassword().equals(loginData.getPassword())) {
+            //returner en token!
+            return JWTHandler.generateToken(loginData.getUsername());
         }
-        return ":(";
+        //Afvis med en 401 hvis login fejler!
+        throw new WebApplicationException("FYFY",401);
     }
-
 }
